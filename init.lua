@@ -9,11 +9,7 @@ require('packer').startup(
         -- General
         use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
         use {'nvim-treesitter/playground'}
-        use {
-            'neovim/nvim-lspconfig',
-            config = function()
-            end
-        }
+        use {'neovim/nvim-lspconfig'}
         use {'neoclide/coc.nvim', branch = 'release'}
         use {'nvim-tree/nvim-web-devicons'}
         use {'ryanoasis/vim-devicons'}
@@ -55,7 +51,7 @@ vim.g.mapleader = ' '
 
 -- Treesitter
 require('nvim-treesitter.configs').setup {
-    ensure_installed = {'go', 'svelte'},
+    ensure_installed = {'go', 'svelte', 'javascript', 'typescript'},
     sync_install = false,
     auto_install = true,
     highlight = {
@@ -115,6 +111,7 @@ require('lspconfig').gopls.setup {
         }
     }
 }
+require('lspconfig').svelte.setup {}
 
 -- NERDTree
 vim.g.NERDTreeWinPos = 'right' -- Appear on right
