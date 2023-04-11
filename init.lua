@@ -32,8 +32,14 @@ require('packer').startup(
 
         -- ToggleTerm
         use {'akinsho/toggleterm.nvim', tag = '*'}
+
+        -- Telescope
+        use {'nvim-telescope/telescope.nvim', tag = '0.1.1', requires = {{'nvim-lua/plenary.nvim'}}}
     end
 )
+
+-- Helper funcs
+local map = vim.api.nvim_set_keymap
 
 -- General
 vim.opt.number = true
@@ -42,6 +48,7 @@ vim.opt.updatetime = 100
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.signcolumn = 'yes'
+vim.g.mapleader = ' '
 
 -- Treesitter
 require('nvim-treesitter.configs').setup {
@@ -50,7 +57,6 @@ require('nvim-treesitter.configs').setup {
     auto_install = true,
     highlight = {
         enable = true,
-        -- disable = {'c', 'rust'},
         additional_vim_regex_highlighting = true
     }
 }
@@ -75,6 +81,13 @@ require('nvim-treesitter.configs').setup {
 --         }
 --     }
 -- }
+
+-- Telescope
+local telescopeBuiltIn = require('telescope.builtin')
+vim.keymap.set('n', '<C-p>', telescopeBuiltIn.find_files, {})
+vim.keymap.set('n', '<leader>pg', telescopeBuiltIn.live_grep, {})
+vim.keymap.set('n', '<leader>pb', telescopeBuiltIn.buffers, {})
+vim.keymap.set('n', '<leader>ph', telescopeBuiltIn.help_tags, {})
 
 -- LSP
 require('lspconfig').gopls.setup {
@@ -142,9 +155,7 @@ require('toggleterm').setup {
 }
 
 -- Keybinds
-local map = vim.api.nvim_set_keymap
 local noremap = {noremap = true}
-vim.g.mapleader = ' '
 
 -- Update config
 map('n', [[<C-\>]], '<cmd>echo $MYVIMRC<CR><cmd>PackerSync<CR>', noremap)
