@@ -34,6 +34,9 @@ require('packer').startup(
 
         -- Scrollbar
         use {'petertriho/nvim-scrollbar'}
+
+        -- Per-project configs
+        use {'klen/nvim-config-local'}
     end
 )
 
@@ -62,7 +65,8 @@ map('n', '<M-h>', [[<Cmd>wincmd h<CR>]], {noremap = true})
 map('n', '<M-j>', [[<Cmd>wincmd j<CR>]], {noremap = true})
 map('n', '<M-k>', [[<Cmd>wincmd k<CR>]], {noremap = true})
 map('n', '<M-l>', [[<Cmd>wincmd l<CR>]], {noremap = true})
-map('n', '<M-o>', ':vsplit<CR>', {noremap = true})
+map('n', '<M-o>', ':vsplit<CR>:wincmd l<CR>', {noremap = true})
+map('n', '<M-c>', ':close<CR>', {noremap = true})
 
 -- Treesitter
 require('nvim-treesitter.configs').setup {
@@ -88,6 +92,14 @@ vim.keymap.set('n', '<M-p>g', telescopeBuiltIn.live_grep, {})
 vim.keymap.set('n', '<M-p>b', telescopeBuiltIn.buffers, {})
 vim.keymap.set('n', '<M-p>h', telescopeBuiltIn.help_tags, {})
 
+-- Local configs
+require('config-local').setup {
+    config_files = {'.vimrc.lua', '.vimrc', '.nvim.lua'},
+    hashfile = vim.fn.stdpath('data') .. '/config-local',
+    silent = true,
+    lookup_parentu = true
+}
+
 -- LSP
 require('lspconfig').gopls.setup {
     cmd = {'gopls', 'serve'},
@@ -106,10 +118,29 @@ require('lspconfig').gopls.setup {
     }
 }
 require('lspconfig').svelte.setup {}
+require('lspconfig').golangci_lint_ls.setup {}
+require('lspconfig').eslint.setup {
+    on_attach = function(client, bufnr)
+        vim.api.nvim_create_autocmd(
+            'BufWritePre',
+            {
+                pattern = {
+                    '*.tsx',
+                    '*.ts',
+                    '*.jsx',
+                    '*.js',
+                    '*.svelte'
+                },
+                command = 'EslintFixAll'
+            }
+        )
+    end
+}
 
 -- NERDTree
 vim.g.NERDTreeWinPos = 'right' -- Appear on right
 vim.g.NERDTreeShowHidden = true
+vim.g.NERDTreeIgnore = {[[.DS_Store]]}
 map('n', '<C-;>', ':NERDTreeFocus<CR>', {noremap = true})
 map('n', [[<C-'>;]], ':NERDTreeToggle<CR>', {noremap = true})
 map('n', [[<C-'>f]], ':NERDTreeFind<CR>', {noremap = true})
@@ -156,6 +187,7 @@ require('lualine').setup {
 require('toggleterm').setup {
     open_mapping = [[<C-`>]]
 }
+map('n', '<M-g>g', [[:99TermExec cmd="gitui" direction=float<CR>]], {noremap = true})
 
 -- Coc
 local keyset = vim.keymap.set
@@ -191,23 +223,8 @@ map('n', 'gr', '<Plug>(coc-references)', {silent = true})
 map('n', 'gh', '<CMD>lua _G.show_docs()<CR>', {silent = true})
 
 -- Treesitter Playground
--- require 'nvim-treesitter.configs'.setup {
---     playground = {
---         enable = true,
---         disable = {},
---         updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
---         persist_queries = false, -- Whether the query persists across vim sessions
---         keybindings = {
---             toggle_query_editor = 'o',
---             toggle_hl_groups = 'i',
---             toggle_injected_languages = 't',
---             toggle_anonymous_nodes = 'a',
---             toggle_language_display = 'I',
---             focus_language = 'f',
---             unfocus_language = 'F',
---             update = 'R',
---             goto_node = '<cr>',
---             show_help = '?'
---         }
---     }
--- }
+require 'nvim-treesitter.configs'.setup {
+    playground = {
+        enable = true
+    }
+}
