@@ -162,6 +162,12 @@ vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 
 -- Tabs
 require('barbar').setup()
+map('n', '<M-,>', '<Cmd>BufferPrevious<CR>', {noremap = true, silent = true})
+map('n', '<M-.>', '<Cmd>BufferNext<CR>', {noremap = true, silent = true})
+map('n', '<M-<>', '<Cmd>BufferMovePrevious<CR>', {noremap = true, silent = true})
+map('n', '<M->>', '<Cmd>BufferMoveNext<CR>', {noremap = true, silent = true})
+map('n', '<M-c>', '<Cmd>BufferClose<CR>', {noremap = true, silent = true})
+
 -- Status bar
 require('lualine').setup {
     options = {
