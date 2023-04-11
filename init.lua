@@ -13,10 +13,8 @@ require('packer').startup(
         use {'neoclide/coc.nvim', branch = 'release'}
         use {'nvim-tree/nvim-web-devicons'}
         use {'ryanoasis/vim-devicons'}
-
         -- Tabs
         use {'romgrk/barbar.nvim', requires = 'nvim-web-devicons'}
-
         -- NERDTree
         use 'preservim/nerdtree'
 
@@ -50,7 +48,16 @@ vim.opt.updatetime = 100
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.signcolumn = 'yes'
-vim.g.mapleader = ' '
+vim.g.mapleader = '^['
+
+-- Split navigation
+vim.keymap.set('n', '<C-h>', [[<Cmd>wincmd h<CR>]], {noremap = true})
+vim.keymap.set('n', '<C-j>', [[<Cmd>wincmd j<CR>]], {noremap = true})
+vim.keymap.set('n', '<C-k>', [[<Cmd>wincmd k<CR>]], {noremap = true})
+vim.keymap.set('n', '<C-l>', [[<Cmd>wincmd l<CR>]], {noremap = true})
+
+-- Line wrapping
+vim.keymap.set('n', '<leader>z', [[:set wrap!<CR>]], {noremap = true})
 
 -- Treesitter
 require('nvim-treesitter.configs').setup {
@@ -93,9 +100,9 @@ require('telescope').setup {
 }
 local telescopeBuiltIn = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', telescopeBuiltIn.find_files, {})
-vim.keymap.set('n', '<leader>pg', telescopeBuiltIn.live_grep, {})
-vim.keymap.set('n', '<leader>pb', telescopeBuiltIn.buffers, {})
-vim.keymap.set('n', '<leader>ph', telescopeBuiltIn.help_tags, {})
+vim.keymap.set('n', '<M-p>g', telescopeBuiltIn.live_grep, {})
+vim.keymap.set('n', '<M-p>b', telescopeBuiltIn.buffers, {})
+vim.keymap.set('n', '<M-p>h', telescopeBuiltIn.help_tags, {})
 
 -- LSP
 require('lspconfig').gopls.setup {
@@ -119,8 +126,11 @@ require('lspconfig').svelte.setup {}
 -- NERDTree
 vim.g.NERDTreeWinPos = 'right' -- Appear on right
 vim.g.NERDTreeShowHidden = true
+map('n', '<C-;>', ':NERDTreeFocus<CR>', {noremap = true})
+map('n', [[<C-'>;]], ':NERDTreeToggle<CR>', {noremap = true})
+map('n', [[<C-'>f]], ':NERDTreeFind<CR>', {noremap = true})
 -- NERDTree startup
-vim.cmd [[autocmd VimEnter * NERDTree | wincmd p]]
+-- vim.cmd [[autocmd VimEnter * NERDTree | wincmd p]]
 -- NERDTree close
 vim.cmd [[autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif]]
 vim.cmd [[autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif]]
@@ -134,7 +144,8 @@ require('github-theme').setup {
     variable_style = 'none',
     overrides = function(c)
         return {
-            Type = {fg = c.syntax.func} -- type XXX is function color, it's the same as "type" by default (like in VSCode theme)
+            -- type XXX interface/struct, XXX is a function color(red) the same as "type" by default. We change it to func color (purple) like in VSCode theme
+            Type = {fg = c.syntax.func}
         }
     end
 }
@@ -150,13 +161,7 @@ map('v', '<C-/>', ':CommentToggle<CR>', {silent = true, noremap = true})
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 
 -- Tabs
-require 'barbar'.setup {
-    animation = true,
-    auto_hide = false,
-    clickable = true,
-    focus_on_close = 'right'
-}
-
+require('barbar').setup()
 -- Status bar
 require('lualine').setup {
     options = {
@@ -174,30 +179,10 @@ require('toggleterm').setup {
 local noremap = {noremap = true}
 
 -- Update config
-map('n', [[<C-\>]], '<cmd>echo $MYVIMRC<CR><cmd>PackerSync<CR>', noremap)
-
+map('n', [[<C-\>]], '<cmd>PackerSync<CR>', noremap)
 -- Some common mappings
 map('n', '<C-s>', ':w<CR>', noremap)
 map('t', '<C-c>', '<C-c>', noremap) -- Interrupt (looks weird i know)
-
--- Nerd Tree
-map('n', '<C-;>', ':NERDTreeFocus<CR>', noremap)
-map('n', '<C-t>', ':NERDTreeToggle<CR>', noremap)
-map('n', '<C-f>', ':NERDTreeFind<CR>', noremap)
-
--- Tabs
-local tabsOpts = {noremap = true, silent = true}
-map('n', '<Alt-,>', '<Cmd>BufferPrevious<CR>', tabsOpts)
-map('n', '<Alt-.>', '<Cmd>BufferNext<CR>', tabsOpts)
-map('n', '<C-w>', '<Cmd>BufferClose<CR>', tabsOpts)
--- Re-order to previous/next
-map('n', '<A-<>', '<Cmd>BufferMovePrevious<CR>', tabsOpts)
-map('n', '<A->>', '<Cmd>BufferMoveNext<CR>', tabsOpts)
--- map('n', '<A-p>', '<Cmd>BufferPin<CR>', tabsOpts)
-map('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<CR>', tabsOpts)
-map('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<CR>', tabsOpts)
-map('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<CR>', tabsOpts)
-map('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<CR>', tabsOpts)
 
 -- Coc
 local keyset = vim.keymap.set
