@@ -13,8 +13,7 @@ require('packer').startup(
         use {'neoclide/coc.nvim', branch = 'release'}
         use {'nvim-tree/nvim-web-devicons'}
         use {'ryanoasis/vim-devicons'}
-        -- Tabs
-        use {'romgrk/barbar.nvim', requires = 'nvim-web-devicons'}
+
         -- NERDTree
         use 'preservim/nerdtree'
 
@@ -50,14 +49,20 @@ vim.opt.writebackup = false
 vim.opt.signcolumn = 'yes'
 vim.g.mapleader = '^['
 
--- Split navigation
-vim.keymap.set('n', '<C-h>', [[<Cmd>wincmd h<CR>]], {noremap = true})
-vim.keymap.set('n', '<C-j>', [[<Cmd>wincmd j<CR>]], {noremap = true})
-vim.keymap.set('n', '<C-k>', [[<Cmd>wincmd k<CR>]], {noremap = true})
-vim.keymap.set('n', '<C-l>', [[<Cmd>wincmd l<CR>]], {noremap = true})
+-- Update config
+map('n', [[<C-\>]], '<cmd>PackerSync<CR>', {noremap = true})
 
--- Line wrapping
-vim.keymap.set('n', '<leader>z', [[:set wrap!<CR>]], {noremap = true})
+-- Some common mappings
+map('n', '<C-s>', ':w<CR>', {noremap = true})
+map('t', '<C-c>', '<C-c>', {noremap = true}) -- Interrupt (looks weird i know)
+map('n', '<M-z>', [[:set wrap!<CR>]], {noremap = true}) -- Toggle line wrap
+
+-- Splits
+map('n', '<M-h>', [[<Cmd>wincmd h<CR>]], {noremap = true})
+map('n', '<M-j>', [[<Cmd>wincmd j<CR>]], {noremap = true})
+map('n', '<M-k>', [[<Cmd>wincmd k<CR>]], {noremap = true})
+map('n', '<M-l>', [[<Cmd>wincmd l<CR>]], {noremap = true})
+map('n', '<M-o>', ':vsplit', {noremap = true})
 
 -- Treesitter
 require('nvim-treesitter.configs').setup {
@@ -69,27 +74,6 @@ require('nvim-treesitter.configs').setup {
         additional_vim_regex_highlighting = true
     }
 }
--- Treesitter Playground
--- require 'nvim-treesitter.configs'.setup {
---     playground = {
---         enable = true,
---         disable = {},
---         updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
---         persist_queries = false, -- Whether the query persists across vim sessions
---         keybindings = {
---             toggle_query_editor = 'o',
---             toggle_hl_groups = 'i',
---             toggle_injected_languages = 't',
---             toggle_anonymous_nodes = 'a',
---             toggle_language_display = 'I',
---             focus_language = 'f',
---             unfocus_language = 'F',
---             update = 'R',
---             goto_node = '<cr>',
---             show_help = '?'
---         }
---     }
--- }
 
 -- Telescope
 require('telescope').setup {
@@ -160,14 +144,6 @@ map('v', '<C-/>', ':CommentToggle<CR>', {silent = true, noremap = true})
 -- Auto formatting
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 
--- Tabs
-require('barbar').setup()
-map('n', '<M-,>', '<Cmd>BufferPrevious<CR>', {noremap = true, silent = true})
-map('n', '<M-.>', '<Cmd>BufferNext<CR>', {noremap = true, silent = true})
-map('n', '<M-<>', '<Cmd>BufferMovePrevious<CR>', {noremap = true, silent = true})
-map('n', '<M->>', '<Cmd>BufferMoveNext<CR>', {noremap = true, silent = true})
-map('n', '<M-c>', '<Cmd>BufferClose<CR>', {noremap = true, silent = true})
-
 -- Status bar
 require('lualine').setup {
     options = {
@@ -181,15 +157,6 @@ require('toggleterm').setup {
     open_mapping = [[<C-`>]]
 }
 
--- Keybinds
-local noremap = {noremap = true}
-
--- Update config
-map('n', [[<C-\>]], '<cmd>PackerSync<CR>', noremap)
--- Some common mappings
-map('n', '<C-s>', ':w<CR>', noremap)
-map('t', '<C-c>', '<C-c>', noremap) -- Interrupt (looks weird i know)
-
 -- Coc
 local keyset = vim.keymap.set
 -- Autocomplete
@@ -199,12 +166,12 @@ function _G.check_back_space()
 end
 
 local opts = {silent = true, noremap = true, expr = true, replace_keycodes = false}
-keyset('i', '<TAB>', 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
-keyset('i', '<S-TAB>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
-keyset('i', '<cr>', [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
-keyset('i', '<c-space>', 'coc#refresh()', {silent = true, expr = true})
-keyset('n', '[g', '<Plug>(coc-diagnostic-prev)', {silent = true})
-keyset('n', ']g', '<Plug>(coc-diagnostic-next)', {silent = true})
+map('i', '<TAB>', 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
+map('i', '<S-TAB>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
+map('i', '<cr>', [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+map('i', '<c-space>', 'coc#refresh()', {silent = true, expr = true})
+map('n', '[g', '<Plug>(coc-diagnostic-prev)', {silent = true})
+map('n', ']g', '<Plug>(coc-diagnostic-next)', {silent = true})
 
 -- GoTo code navigation
 function _G.show_docs()
@@ -217,8 +184,30 @@ function _G.show_docs()
         vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
     end
 end
-keyset('n', 'gd', '<Plug>(coc-definition)', {silent = true})
-keyset('n', 'gy', '<Plug>(coc-type-definition)', {silent = true})
-keyset('n', 'gi', '<Plug>(coc-implementation)', {silent = true})
-keyset('n', 'gr', '<Plug>(coc-references)', {silent = true})
-keyset('n', 'gh', '<CMD>lua _G.show_docs()<CR>', {silent = true})
+map('n', 'gd', '<Plug>(coc-definition)', {silent = true})
+map('n', 'gy', '<Plug>(coc-type-definition)', {silent = true})
+map('n', 'gi', '<Plug>(coc-implementation)', {silent = true})
+map('n', 'gr', '<Plug>(coc-references)', {silent = true})
+map('n', 'gh', '<CMD>lua _G.show_docs()<CR>', {silent = true})
+
+-- Treesitter Playground
+-- require 'nvim-treesitter.configs'.setup {
+--     playground = {
+--         enable = true,
+--         disable = {},
+--         updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+--         persist_queries = false, -- Whether the query persists across vim sessions
+--         keybindings = {
+--             toggle_query_editor = 'o',
+--             toggle_hl_groups = 'i',
+--             toggle_injected_languages = 't',
+--             toggle_anonymous_nodes = 'a',
+--             toggle_language_display = 'I',
+--             focus_language = 'f',
+--             unfocus_language = 'F',
+--             update = 'R',
+--             goto_node = '<cr>',
+--             show_help = '?'
+--         }
+--     }
+-- }
