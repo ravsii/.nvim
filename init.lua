@@ -35,6 +35,9 @@ require('packer').startup(
 
         -- Telescope
         use {'nvim-telescope/telescope.nvim', tag = '0.1.1', requires = {{'nvim-lua/plenary.nvim'}}}
+
+        -- Comments
+        use {'terrortylor/nvim-comment'}
     end
 )
 
@@ -83,6 +86,12 @@ require('nvim-treesitter.configs').setup {
 -- }
 
 -- Telescope
+require('telescope').setup {
+    defaults = {
+        file_ignore_patterns = {'node_modules/.*', 'dist/.*'},
+        layout_strategy = 'flex'
+    }
+}
 local telescopeBuiltIn = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', telescopeBuiltIn.find_files, {})
 vim.keymap.set('n', '<leader>pg', telescopeBuiltIn.live_grep, {})
@@ -130,6 +139,10 @@ require('github-theme').setup {
     end
 }
 
+-- Comments
+require('nvim_comment').setup()
+map('v', '<C-/>', ':CommentToggle<CR>', {silent = true, noremap = true})
+
 -- Auto formatting
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 
@@ -161,7 +174,7 @@ local noremap = {noremap = true}
 map('n', [[<C-\>]], '<cmd>echo $MYVIMRC<CR><cmd>PackerSync<CR>', noremap)
 
 -- Some common mappings
-map('n', '<C-s>', ':w', noremap)
+map('n', '<C-s>', ':w<CR>', noremap)
 map('t', '<C-c>', '<C-c>', noremap) -- Interrupt (looks weird i know)
 
 -- Nerd Tree
