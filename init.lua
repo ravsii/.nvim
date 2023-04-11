@@ -62,7 +62,7 @@ map('n', '<M-h>', [[<Cmd>wincmd h<CR>]], {noremap = true})
 map('n', '<M-j>', [[<Cmd>wincmd j<CR>]], {noremap = true})
 map('n', '<M-k>', [[<Cmd>wincmd k<CR>]], {noremap = true})
 map('n', '<M-l>', [[<Cmd>wincmd l<CR>]], {noremap = true})
-map('n', '<M-o>', ':vsplit', {noremap = true})
+map('n', '<M-o>', ':vsplit<CR>', {noremap = true})
 
 -- Treesitter
 require('nvim-treesitter.configs').setup {
