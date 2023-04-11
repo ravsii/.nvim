@@ -84,7 +84,7 @@ require('nvim-treesitter.configs').setup {
 -- Telescope
 require('telescope').setup {
     defaults = {
-        file_ignore_patterns = {'node_modules/.*', 'dist/.*'},
+        file_ignore_patterns = {'builds/.*', 'node_modules/.*', 'dist/.*'},
         layout_strategy = 'flex'
     }
 }
