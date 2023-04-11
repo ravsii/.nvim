@@ -12,29 +12,11 @@ require('packer').startup(
         use {
             'neovim/nvim-lspconfig',
             config = function()
-                lspconfig = require 'lspconfig'
-                util = require 'lspconfig/util'
-
-                lspconfig.gopls.setup {
-                    cmd = {'gopls', 'serve'},
-                    filetypes = {'go', 'gomod'},
-                    on_attach = function(client, bufnr)
-                        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-                    end,
-                    root_dir = util.root_pattern('go.work', 'go.mod', '.git'),
-                    settings = {
-                        gopls = {
-                            analyses = {
-                                unusedparams = true
-                            },
-                            staticcheck = true
-                        }
-                    }
-                }
             end
         }
         use {'neoclide/coc.nvim', branch = 'release'}
         use {'nvim-tree/nvim-web-devicons'}
+        use {'ryanoasis/vim-devicons'}
 
         -- Tabs
         use {'romgrk/barbar.nvim', requires = 'nvim-web-devicons'}
@@ -47,6 +29,9 @@ require('packer').startup(
 
         -- Git
         use {'airblade/vim-gitgutter'}
+
+        -- ToggleTerm
+        use {'akinsho/toggleterm.nvim', tag = '*'}
     end
 )
 
@@ -54,6 +39,9 @@ require('packer').startup(
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.updatetime = 100
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.signcolumn = 'yes'
 
 -- Treesitter
 require('nvim-treesitter.configs').setup {
@@ -87,6 +75,24 @@ require('nvim-treesitter.configs').setup {
 --         }
 --     }
 -- }
+
+-- LSP
+require('lspconfig').gopls.setup {
+    cmd = {'gopls', 'serve'},
+    filetypes = {'go', 'gomod'},
+    on_attach = function(client, bufnr)
+        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    end,
+    root_dir = require('lspconfig/util').root_pattern('go.work', 'go.mod', '.git'),
+    settings = {
+        gopls = {
+            analyses = {
+                unusedparams = true
+            },
+            staticcheck = true
+        }
+    }
+}
 
 -- NERDTree
 vim.g.NERDTreeWinPos = 'right' -- Appear on right
@@ -130,8 +136,12 @@ require('lualine').setup {
     }
 }
 
--- Keybinds
+-- ToggleTerm
+require('toggleterm').setup {
+    open_mapping = [[<C-`>]]
+}
 
+-- Keybinds
 local map = vim.api.nvim_set_keymap
 local noremap = {noremap = true}
 vim.g.mapleader = ' '
@@ -139,58 +149,30 @@ vim.g.mapleader = ' '
 -- Update config
 map('n', [[<C-\>]], '<cmd>echo $MYVIMRC<CR><cmd>PackerSync<CR>', noremap)
 
--- Save as in normal IDEs
+-- Some common mappings
 map('n', '<C-s>', ':w', noremap)
+map('t', '<C-c>', '<C-c>', noremap) -- Interrupt (looks weird i know)
 
 -- Nerd Tree
 map('n', '<C-;>', ':NERDTreeFocus<CR>', noremap)
-map('n', '<C-n>', ':NERDTree<CR>', noremap)
 map('n', '<C-t>', ':NERDTreeToggle<CR>', noremap)
 map('n', '<C-f>', ':NERDTreeFind<CR>', noremap)
 
 -- Tabs
 local tabsOpts = {noremap = true, silent = true}
-map('n', '<A-,>', '<Cmd>BufferPrevious<CR>', tabsOpts)
-map('n', '<A-.>', '<Cmd>BufferNext<CR>', tabsOpts)
+map('n', '<Alt-,>', '<Cmd>BufferPrevious<CR>', tabsOpts)
+map('n', '<Alt-.>', '<Cmd>BufferNext<CR>', tabsOpts)
+map('n', '<C-w>', '<Cmd>BufferClose<CR>', tabsOpts)
 -- Re-order to previous/next
 map('n', '<A-<>', '<Cmd>BufferMovePrevious<CR>', tabsOpts)
 map('n', '<A->>', '<Cmd>BufferMoveNext<CR>', tabsOpts)
--- Goto buffer in position...
-map('n', '<A-1>', '<Cmd>BufferGoto 1<CR>', tabsOpts)
-map('n', '<A-2>', '<Cmd>BufferGoto 2<CR>', tabsOpts)
-map('n', '<A-3>', '<Cmd>BufferGoto 3<CR>', tabsOpts)
-map('n', '<A-4>', '<Cmd>BufferGoto 4<CR>', tabsOpts)
-map('n', '<A-5>', '<Cmd>BufferGoto 5<CR>', tabsOpts)
-map('n', '<A-6>', '<Cmd>BufferGoto 6<CR>', tabsOpts)
-map('n', '<A-7>', '<Cmd>BufferGoto 7<CR>', tabsOpts)
-map('n', '<A-8>', '<Cmd>BufferGoto 8<CR>', tabsOpts)
-map('n', '<A-9>', '<Cmd>BufferGoto 9<CR>', tabsOpts)
-map('n', '<A-0>', '<Cmd>BufferLast<CR>', tabsOpts)
--- Pin/unpin buffer
-map('n', '<A-p>', '<Cmd>BufferPin<CR>', tabsOpts)
--- Close buffer
-map('n', '<A-c>', '<Cmd>BufferClose<CR>', tabsOpts)
--- Wipeout buffer
---                 :BufferWipeout
--- Close commands
---                 :BufferCloseAllButCurrent
---                 :BufferCloseAllButPinned
---                 :BufferCloseAllButCurrentOrPinned
---                 :BufferCloseBuffersLeft
---                 :BufferCloseBuffersRight
--- Magic buffer-picking mode
-map('n', '<C-p>', '<Cmd>BufferPick<CR>', tabsOpts)
--- Sort automatically by...
+-- map('n', '<A-p>', '<Cmd>BufferPin<CR>', tabsOpts)
 map('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<CR>', tabsOpts)
 map('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<CR>', tabsOpts)
 map('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<CR>', tabsOpts)
 map('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<CR>', tabsOpts)
 
 -- Coc
-vim.opt.backup = false
-vim.opt.writebackup = false
-vim.opt.signcolumn = 'yes'
-
 local keyset = vim.keymap.set
 -- Autocomplete
 function _G.check_back_space()
