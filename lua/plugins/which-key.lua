@@ -13,6 +13,7 @@ return {
         {
           mode = { "n", "v" },
           { "<leader><tab>", group = "tabs" },
+          { "<leader>P", group = "plugins", mode = "n" },
           { "<leader>c", group = "code" },
           { "<leader>d", group = "debug" },
           { "<leader>dp", group = "profiler" },

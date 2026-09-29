@@ -90,6 +90,12 @@ map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Commen
 -- lazy
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
+-- vim.pack
+map("n", "<leader>Pu", function() vim.pack.update() end, { desc = "Update plugins" })
+map("n", "<leader>Pl", function()
+  vim.print(vim.pack.get(nil, { info = false }))
+end, { desc = "List plugins" })
+
 -- new file
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
