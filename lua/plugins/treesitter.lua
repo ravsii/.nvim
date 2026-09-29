@@ -19,12 +19,12 @@ vim.api.nvim_create_autocmd("PackChanged", {
 })
 
 vim.pack.add({
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
+  "https://github.com/nvim-treesitter/nvim-treesitter",
+  "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
   "https://github.com/nvim-treesitter/nvim-treesitter-context",
   "https://github.com/ravsii/tree-sitter-d2",
   "https://github.com/bezhermoso/tree-sitter-ghostty",
-}, { confirm = false, load = true })
+})
 
 local treesitter = require("nvim-treesitter")
 treesitter.setup()
@@ -50,12 +50,10 @@ require("treesitter-context").setup({
   mode = "topline",
 })
 
-local map = vim.keymap.set
+vim.keymap.set("x", "[n", function() require("vim.treesitter._select").select_prev(vim.v.count1) end, { desc = "Select previous treesitter node" })
+vim.keymap.set("x", "]n", function() require("vim.treesitter._select").select_next(vim.v.count1) end, { desc = "Select next treesitter node" })
 
-map("x", "[n", function() require("vim.treesitter._select").select_prev(vim.v.count1) end, { desc = "Select previous treesitter node" })
-map("x", "]n", function() require("vim.treesitter._select").select_next(vim.v.count1) end, { desc = "Select next treesitter node" })
-
-map({ "n", "x", "o" }, "<C-Space>", function()
+vim.keymap.set({ "n", "x", "o" }, "<C-Space>", function()
   if vim.treesitter.get_parser(nil, nil, { error = false }) then
     require("vim.treesitter._select").select_parent(vim.v.count1)
   else
@@ -63,7 +61,7 @@ map({ "n", "x", "o" }, "<C-Space>", function()
   end
 end, { desc = "Select parent treesitter node or outer LSP selection" })
 
-map({ "n", "x", "o" }, "<BS>", function()
+vim.keymap.set({ "n", "x", "o" }, "<BS>", function()
   if vim.treesitter.get_parser(nil, nil, { error = false }) then
     require("vim.treesitter._select").select_child(vim.v.count1)
   else
@@ -71,8 +69,8 @@ map({ "n", "x", "o" }, "<BS>", function()
   end
 end, { desc = "Select child treesitter node or inner LSP selection" })
 
-map("n", "<M-h>", function() require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner") end, { desc = "Swap previous parameter" })
-map({ "n", "x", "o" }, "<M-l>", function() require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner") end, { desc = "Swap next parameter" })
+vim.keymap.set("n", "<M-h>", function() require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner") end, { desc = "Swap previous parameter" })
+vim.keymap.set({ "n", "x", "o" }, "<M-l>", function() require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner") end, { desc = "Swap next parameter" })
 
 for _, binding in ipairs({
   { "]f", "@function.outer", "next", "goto_next_start" },
@@ -83,7 +81,7 @@ for _, binding in ipairs({
   { "[c", "@class.outer", "previous", "goto_previous_start" },
 }) do
   local key, capture, direction, method = unpack(binding)
-  map({ "n", "x", "o" }, key, function()
+  vim.keymap.set({ "n", "x", "o" }, key, function()
     require("nvim-treesitter-textobjects.move")[method](capture)
   end, { desc = direction .. " " .. capture })
 end

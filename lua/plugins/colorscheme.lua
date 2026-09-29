@@ -1,3 +1,8 @@
+vim.pack.add({
+  "https://github.com/rose-pine/neovim",
+  "https://github.com/folke/tokyonight.nvim",
+})
+
 require("rose-pine").setup({
   variant = "moon",
   styles = { transparency = true },

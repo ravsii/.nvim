@@ -2,7 +2,7 @@ require("plugins.icons")
 
 vim.pack.add({
   "https://github.com/FylerOrg/fyler.nvim",
-}, { confirm = false, load = true })
+})
 
 require("fyler").setup({
   auto_confirm_simple_mutation = false,
