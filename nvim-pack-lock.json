@@ -1,9 +1,49 @@
 {
   "plugins": {
-    "tree-sitter-d2": {
-      "rev": "d552b17bf3e4c29b3f090a4a02f61ed2c4a67b3b",
-      "src": "https://github.com/ravsii/tree-sitter-d2",
+    "fff": {
+      "rev": "e5dccede829cec037b3a6699aceaa9e61ec9244b",
+      "src": "https://github.com/dmtrKovalenko/fff",
       "version": ">=0.0.0"
+    },
+    "fyler.nvim": {
+      "rev": "e1626ff3815a7ebd15698fd6c6d1188a079993d6",
+      "src": "https://github.com/FylerOrg/fyler.nvim"
+    },
+    "mini.icons": {
+      "rev": "f642e3ba8c12afbc8f32f6d77ef6597eac56786f",
+      "src": "https://github.com/nvim-mini/mini.icons"
+    },
+    "nvim-treesitter": {
+      "rev": "728e031f6b11d03d1f0708b7dc4fb0f1d9c8a137",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
+    },
+    "nvim-treesitter-context": {
+      "rev": "f3061339b8eaf9fda873600bc425b8d2d8502533",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
+    },
+    "nvim-treesitter-textobjects": {
+      "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+      "version": "'main'"
+    },
+    "rose-pine": {
+      "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
+      "src": "https://github.com/rose-pine/neovim",
+      "version": "'main'"
+    },
+    "tokyonight.nvim": {
+      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+      "src": "https://github.com/folke/tokyonight.nvim",
+      "version": "'main'"
+    },
+    "tree-sitter-d2": {
+      "rev": "200434618a6bede20ebd4982aa4d4f1edeb0b5c1",
+      "src": "https://github.com/ravsii/tree-sitter-d2"
+    },
+    "tree-sitter-ghostty": {
+      "rev": "a2075c3761a41449bb4faf69794c902dfef6d70e",
+      "src": "https://github.com/bezhermoso/tree-sitter-ghostty"
     }
   }
 }
