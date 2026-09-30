@@ -1,22 +1,23 @@
 local parsers = { "lua", "luadoc", "vim", "vimdoc", "go", "gomod", "gowork", "gosum", "markdown", "slint" }
 
-vim.api.nvim_create_autocmd("PackChanged", {
-  callback = function(event)
-    local name = event.data.spec.name
-    local kind = event.data.kind
-    if kind ~= "install" and kind ~= "update" then return end
+local function build_parser(data, target)
+  local result = vim.system({ "make", target }, { cwd = data.path }):wait()
+  if result.code ~= 0 then
+    vim.notify(data.spec.name .. " build failed:\n" .. (result.stderr or ""), vim.log.levels.ERROR)
+  end
+end
 
-    local target = ({ ["tree-sitter-d2"] = "nvim-install", ["tree-sitter-ghostty"] = "nvim_install" })[name]
-    if target then
-      local result = vim.system({ "make", target }, { cwd = event.data.path }):wait()
-      if result.code ~= 0 then
-        vim.notify(name .. " build failed:\n" .. (result.stderr or ""), vim.log.levels.ERROR)
-      end
-    elseif name == "nvim-treesitter" then
-      vim.schedule(function() vim.cmd.TSUpdate() end)
-    end
-  end,
-})
+require("utils.pack_changed").on_change("tree-sitter-d2", function(data)
+  build_parser(data, "nvim-install")
+end)
+
+require("utils.pack_changed").on_change("tree-sitter-ghostty", function(data)
+  build_parser(data, "nvim_install")
+end)
+
+require("utils.pack_changed").on_change("nvim-treesitter", function()
+  vim.schedule(function() vim.cmd.TSUpdate() end)
+end)
 
 vim.pack.add({
   "https://github.com/nvim-treesitter/nvim-treesitter",

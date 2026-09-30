@@ -1,18 +1,9 @@
-vim.api.nvim_create_autocmd("PackChanged", {
-  callback = function(event)
-    if event.data.spec.name ~= "fff" then
-      return
-    end
-    if event.data.kind ~= "install" and event.data.kind ~= "update" then
-      return
-    end
-
-    if not event.data.active then
-      vim.cmd.packadd("fff")
-    end
-    require("fff.download").download_or_build_binary()
-  end,
-})
+require("utils.pack_changed").on_change("fff", function(data)
+  if not data.active then
+    vim.cmd.packadd("fff")
+  end
+  require("fff.download").download_or_build_binary()
+end)
 
 vim.pack.add({
   "https://github.com/dmtrKovalenko/fff",
