@@ -1,13 +1,16 @@
 require("config.ui2")
 
+-- keymap leader
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+
+-- autocomplete
+vim.opt.completeopt = "menu,menuone,noselect"
 
 vim.opt.autowrite = true
 vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 vim.opt.colorcolumn = "81,120"
 vim.opt.textwidth = 80
-vim.opt.completeopt = "menu,menuone,noselect"
 vim.opt.conceallevel = 0
 vim.opt.confirm = true
 vim.opt.cursorline = true

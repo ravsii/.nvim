@@ -16,6 +16,9 @@ require("fyler").setup({
   use_as_default_explorer = true,
 })
 
-vim.keymap.set("n", "<leader>e", function()
-  require("fyler").toggle({ kind = "split_left_most" })
-end, { desc = "Toggle file explorer" })
+vim.keymap.set(
+  "n",
+  "<leader>e",
+  function() require("fyler").toggle({ kind = "split_left_most" }) end,
+  { desc = "Toggle file explorer" }
+)
