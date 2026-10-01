@@ -120,6 +120,10 @@
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
+    "resolve.nvim": {
+      "rev": "1ed8bcc9ce7d43a0e8e05d0001c9cadb822d95a8",
+      "src": "https://github.com/spacedentist/resolve.nvim"
+    },
     "rose-pine": {
       "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
       "src": "https://github.com/rose-pine/neovim",

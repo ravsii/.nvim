@@ -48,7 +48,6 @@ for _, key in ipairs({
   { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse (open)", mode = { "n", "x" } },
   { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Current File History", mode = "n" },
   { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log (cwd)", mode = "n" },
-  { "<leader>gb", function() Snacks.picker.git_log_line() end, desc = "Git Blame Line", mode = "n" },
   { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (hunks)" },
   { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
   {
