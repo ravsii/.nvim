@@ -18,7 +18,11 @@ require("snacks").setup({
     },
   },
 
-  picker = { enabled = false },
+  picker = {
+    hidden = true,
+    ignored = true,
+    supports_live = true,
+  },
   scroll = { enabled = false },
   indent = { enabled = true, char = "│" },
   notify = { enabled = true },
@@ -35,6 +39,10 @@ for _, key in ipairs({
   { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
   { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
   { "<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
+
+  -- find
+  { "<leader><space>", function() Snacks.picker.files() end, desc = "Find Files (Root Dir)" },
+  { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config" },
 
   -- git
   { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse (open)", mode = { "n", "x" } },
@@ -64,7 +72,7 @@ for _, key in ipairs({
     "<leader>sw",
     function() Snacks.picker.grep_word() end,
     desc = "Visual selection or word (Root Dir)",
-    mode = { "n" },
+    mode = { "n", "x" },
   },
 
   -- search

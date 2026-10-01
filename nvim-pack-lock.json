@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "5553e77b8628b7a08fc2a5135c17647f11d828ee",
+      "rev": "fae5c76c00dec18485f264396ce24368e9c4e9fb",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
@@ -35,6 +35,14 @@
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
+    },
+    "lualine-pretty-path": {
+      "rev": "852cb06f3562bced4776a924e56a9e44d0ce634f",
+      "src": "https://github.com/bwpge/lualine-pretty-path"
+    },
+    "lualine.nvim": {
+      "rev": "221ce6b2d999187044529f49da6554a92f740a96",
+      "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "markdown-preview.nvim": {
       "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
@@ -88,6 +96,10 @@
     "swagger-preview.nvim": {
       "rev": "42999dd6ad0bbb3e6ca5e857f3fc3c12de014110",
       "src": "https://github.com/vinnymeller/swagger-preview.nvim"
+    },
+    "tiny-inline-diagnostic.nvim": {
+      "rev": "6264451f14119d63a52580e5198d6baf8518b0b2",
+      "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim"
     },
     "tokyonight.nvim": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
