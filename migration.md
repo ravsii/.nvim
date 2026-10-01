@@ -28,9 +28,9 @@
 | `bufferline.nvim` | ✅ | `lua/plugins/bufferline.lua`: прежние оформление, диагностика и семь биндов; иконки через `mini.icons`, отступ для Fyler вместо neo-tree. `<S-h>`/`<S-l>` теперь переключают буферы в порядке Bufferline. |
 | `lualine.nvim` | ✅ | `lua/plugins/lualine.lua`: старые секции, тема Rose Pine, исключения по filetype и скроллбар из бэкапа. |
 | `lualine-pretty-path` | ✅ | Подключён вместе с Lualine; иконки предоставляет существующий `mini.icons` через `mock_nvim_web_devicons()`. |
-| `nvim-web-devicons` | ⏳ | Пока не нужен: Fyler, Bufferline и Lualine используют `mini.icons`. |
+| `nvim-web-devicons` | 🚫 | Не переносим: Fyler, Bufferline и Lualine используют `mini.icons`. |
 | `tiny-inline-diagnostic.nvim` | ✅ | `lua/plugins/lsp.lua`: прежний preset `modern` и параметры из бэкапа; встроенные `virtual_text` и `virtual_lines` отключены, чтобы не дублировать сообщения. |
-| `marks.nvim` | ⏳ | — |
+| `marks.nvim` | ✅ | `lua/plugins/marks.lua`: настройки по умолчанию и прежняя подсветка `MarkSignHL`. |
 
 ### Редактирование
 
@@ -53,6 +53,7 @@
 | Плагин | Статус | Примечание |
 | --- | --- | --- |
 | `grug-far.nvim` | ✅ | `lua/plugins/grug-far.lua`: интерактивный поиск и замена через `<leader>sr` с фильтром по расширению текущего файла. |
+| `gitsigns.nvim` | ✅ | `lua/plugins/git.lua`: знаки изменений слева относительно `git merge-base HEAD master` для каждого репозитория; без `master` остаётся стандартное сравнение с индексом. База вычисляется при подключении буфера: после переключения ветки переоткрыть файл. Новый плагин, не из старого набора. |
 | `git-conflict.nvim` | ⏳ | — |
 | `todo-comments.nvim` | ✅ | `lua/plugins/comments.lua`: настройка по умолчанию и старый `<leader>st` через Snacks Picker. |
 | `leetcode.nvim` | 🚫 | Решено не переносить, даже после возвращения Snacks Picker. |
@@ -116,7 +117,7 @@ Neotest использует DAP только для отдельного дей
 | `markdown-preview.nvim` | ✅ | `lua/plugins/preview.lua`: `<leader>cp` для Markdown, `FileType` для команд в текущем буфере; установщик плагина вызывается через `PackChanged` при установке/обновлении пользователем. |
 | `swagger-preview.nvim` | ✅ | `lua/plugins/preview.lua`: `<leader>cp` для JSON, прежние host `127.0.0.1` и port `6969`; `npm install` вызывается через `PackChanged` при установке/обновлении пользователем. Требуется npm. |
 
-Итого для старого набора: **34 перенесено, 14 ожидают переноса, 7 исключены**. `lazy.nvim` как менеджер заменён на `vim.pack` и в подсчёт не входит.
+Итого для старого набора: **35 перенесено, 12 ожидают переноса, 8 исключены**. `lazy.nvim` как менеджер заменён на `vim.pack` и в подсчёт не входит.
 
 SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pack-lock.json`, но работу LSP, установку `lua_ls` и интерфейс which-key нужно проверить вручную.
 Прежние бинды LSP из `lua/core/lsp.lua` восстановлены в `lua/plugins/lsp.lua`: `gd`, `gI`, `gr`, `gy`, `<leader>cl`, `<leader>ss`, `<leader>sS` снова вызывают Snacks Picker с превью. `gD`, `gK` и другие действия остаются встроенными LSP-вызовами. Старое удаление встроенных `grn`, `gra`, `gri`, `grr` не возвращали; для `gr` восстановлен `nowait = true`, что может помешать этим сочетаниям. SchemaStore и языковые настройки LSP остаются в `lsp.lua`; для дополнения вместо встроенного LSP-автотриггера подключён Blink в `lua/plugins/blink.lua` (до `lsp.lua` в `init.lua`). Встроенное автоматическое дополнение слов отключено, чтобы меню не конкурировали.
@@ -131,14 +132,14 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 
 ## Очерёдность оставшегося переноса
 
-Приоритет ориентировочный: сначала базовые возможности редактора, затем удобства и специализированные инструменты. Внутри группы можно переносить плагины по одному или небольшими связками; настройки каждого плагина держать рядом с его подключением. Ниже перечислены **14** плагинов со статусом ⏳ ровно по одному разу. Настройки отдельных языковых LSP-серверов ещё предстоит вернуть из бэкапа без старого механизма слияния `opts`; каталог SchemaStore пока не подключён к JSON/YAML LSP.
+Приоритет ориентировочный: сначала базовые возможности редактора, затем удобства и специализированные инструменты. Внутри группы можно переносить плагины по одному или небольшими связками; настройки каждого плагина держать рядом с его подключением. Ниже перечислены **12** плагинов со статусом ⏳ ровно по одному разу. Настройки отдельных языковых LSP-серверов ещё предстоит вернуть из бэкапа без старого механизма слияния `opts`; каталог SchemaStore пока не подключён к JSON/YAML LSP.
 
-1. **Интерфейс, навигация и Git (3):** `git-conflict.nvim`, `marks.nvim`, `nvim-web-devicons`. `nvim-web-devicons` не нужен Fyler, Bufferline или Lualine с `mini.icons`: переносить только если потребуется другим плагинам.
+1. **Интерфейс и Git (1):** `git-conflict.nvim`.
 2. **Отладка / DAP (6):** `nvim-dap`, `nvim-dap-view`, `nvim-dap-envfile`, `nvim-dap-go`, `mason-nvim-dap.nvim`, `one-small-step-for-vimkind`.
 3. **Тесты и покрытие (5):** `nvim-nio`, `neotest`, `neotest-golang`, `neotest-plenary`, `nvim-coverage`. Зависимости устанавливать перед надстройками; отладка теста через `<leader>td` потребует DAP.
 Превью (`markdown-preview.nvim`, `swagger-preview.nvim`) уже подключены; для них предусмотрены отдельные build-шаги.
 
-**Исключены из переноса (7):** `luassert-types`, `busted-types`, `leetcode.nvim`, `nui.nvim`, `nvim-lint`, `nvim-colorizer.lua`, `dotenv.nvim`. Их конфигурация остаётся только в бэкапе; устанавливать их не планируем.
+**Исключены из переноса (8):** `luassert-types`, `busted-types`, `leetcode.nvim`, `nui.nvim`, `nvim-lint`, `nvim-colorizer.lua`, `dotenv.nvim`, `nvim-web-devicons`. Их конфигурация остаётся только в бэкапе; устанавливать их не планируем.
 
 **Отдельно:** FFF убран из активного конфига: `lua/plugins/fff.lua` удалён, подключение из `init.lua` убрано. Его файлы и запись в `nvim-pack-lock.json` не удалялись вручную; очистку установленного пакета выполнить отдельно по решению пользователя. Поиск файлов и grep теперь выполняет Snacks Picker; Fyler остаётся проводником.
 
