@@ -32,6 +32,10 @@
       "rev": "e1626ff3815a7ebd15698fd6c6d1188a079993d6",
       "src": "https://github.com/FylerOrg/fyler.nvim"
     },
+    "gitsigns.nvim": {
+      "rev": "070a5d7b985546cc57e1fc61e5bc507fecac6045",
+      "src": "https://github.com/lewis6991/gitsigns.nvim"
+    },
     "grug-far.nvim": {
       "rev": "11595bf747edc270bce2069d1020502ad4ae56cf",
       "src": "https://github.com/MagicDuck/grug-far.nvim"
