@@ -1,5 +1,3 @@
-require("plugins.icons")
-
 vim.pack.add({
   "https://github.com/FylerOrg/fyler.nvim",
 })

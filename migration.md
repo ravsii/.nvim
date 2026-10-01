@@ -38,10 +38,10 @@
 | --- | --- |
 | `blink.cmp` | ✅ | `lua/plugins/blink.lua`: старые бинды (`enter` и `<C-y>`), источники LSP/путей/сниппетов/буфера и иконки типов дополнения из бэкапа. Lua fuzzy без сборки Rust. |
 | `friendly-snippets` | ✅ | Подключён рядом с Blink; источник сниппетов также читает восстановленный `snippets/go.json`. |
-| `mini.ai` | ⏳ |
-| `mini.align` | ⏳ |
-| `mini.pairs` | ⏳ |
-| `mini.surround` | ⏳ |
+| `mini.ai` | ✅ | `lua/plugins/mini.lua`: текстовые объекты из бэкапа и подсказки which-key. |
+| `mini.align` | ✅ | `lua/plugins/mini.lua`: стандартная настройка. |
+| `mini.pairs` | ✅ | `lua/plugins/mini.lua`: пары в insert и command mode. Старые `skip_next`, `skip_ts`, `skip_unbalanced`, `markdown` не поддерживаются текущим API `mini.pairs` и не перенесены как неработающие настройки. |
+| `mini.surround` | ✅ | `lua/plugins/mini.lua`: старые префиксы `gsa`/`gsd`/`gsf`/`gsF`/`gsh`/`gsr`, подсказки which-key; `gsn` вызывает `update_n_lines()` отдельным биндом. |
 | `nvim-colorizer.lua` | ⏳ |
 | `ts-comments.nvim` | ⏳ |
 | `yanky.nvim` | ⏳ |
@@ -109,7 +109,7 @@
 | `markdown-preview.nvim` | ✅ | `lua/plugins/preview.lua`: `<leader>cp` для Markdown, `FileType` для команд в текущем буфере; установщик плагина вызывается через `PackChanged` при установке/обновлении пользователем. |
 | `swagger-preview.nvim` | ✅ | `lua/plugins/preview.lua`: `<leader>cp` для JSON, прежние host `127.0.0.1` и port `6969`; `npm install` вызывается через `PackChanged` при установке/обновлении пользователем. Требуется npm. |
 
-Итого для старого набора: **24 перенесено, 26 ожидают переноса, 5 исключены**. `lazy.nvim` как менеджер заменён на `vim.pack` и в подсчёт не входит.
+Итого для старого набора: **28 перенесено, 22 ожидают переноса, 5 исключены**. `lazy.nvim` как менеджер заменён на `vim.pack` и в подсчёт не входит.
 
 SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pack-lock.json`, но работу LSP, установку `lua_ls` и интерфейс which-key нужно проверить вручную.
 Прежние бинды LSP из `lua/core/lsp.lua` восстановлены в `lua/plugins/lsp.lua`: `gd`, `gI`, `gr`, `gy`, `<leader>cl`, `<leader>ss`, `<leader>sS` снова вызывают Snacks Picker с превью. `gD`, `gK` и другие действия остаются встроенными LSP-вызовами. Старое удаление встроенных `grn`, `gra`, `gri`, `grr` не возвращали; для `gr` восстановлен `nowait = true`, что может помешать этим сочетаниям. SchemaStore и языковые настройки LSP остаются в `lsp.lua`; для дополнения вместо встроенного LSP-автотриггера подключён Blink в `lua/plugins/blink.lua` (до `lsp.lua` в `init.lua`). Встроенное автоматическое дополнение слов отключено, чтобы меню не конкурировали.
@@ -119,14 +119,14 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 | Плагин | Назначение | Состояние |
 | --- | --- | --- |
 | [`fyler.nvim`](https://github.com/FylerOrg/fyler.nvim) | Дерево слева | Добавлен в `lua/plugins/fyler.lua` и native lock-файл; `<leader>e` переключает крайний левый сплит шириной 30 колонок. Текущий каталог отображается сверху (`winbar`); имена dotfiles при показе через `g.` подсвечиваются приглушённым цветом `Comment`. Fyler настроен как проводник по умолчанию. |
-| [`mini.icons`](https://github.com/nvim-mini/mini.icons) | Иконки файлов и каталогов для Fyler | Подключён в `lua/plugins/icons.lua`, присутствует в native lock-файле; Fyler использует провайдер `mini_icons`. |
+| [`mini.icons`](https://github.com/nvim-mini/mini.icons) | Иконки файлов и каталогов для Fyler, Bufferline и Lualine | Перенесён из `lua/plugins/icons.lua` в `lua/plugins/mini.lua`; Fyler использует провайдер `mini_icons`, Lualine — `mock_nvim_web_devicons()`. |
 | [`blink.lib`](https://github.com/saghen/blink.lib) | Зависимость Blink из текущей ветки | Подключён в `lua/plugins/blink.lua`; старый Blink v1 обходился без этого плагина. |
 
 ## Очерёдность оставшегося переноса
 
-Приоритет ориентировочный: сначала базовые возможности редактора, затем удобства и специализированные инструменты. Внутри группы можно переносить плагины по одному или небольшими связками; настройки каждого плагина держать рядом с его подключением. Ниже перечислены **26** плагинов со статусом ⏳ ровно по одному разу. Настройки отдельных языковых LSP-серверов ещё предстоит вернуть из бэкапа без старого механизма слияния `opts`; каталог SchemaStore пока не подключён к JSON/YAML LSP.
+Приоритет ориентировочный: сначала базовые возможности редактора, затем удобства и специализированные инструменты. Внутри группы можно переносить плагины по одному или небольшими связками; настройки каждого плагина держать рядом с его подключением. Ниже перечислены **22** плагина со статусом ⏳ ровно по одному разу. Настройки отдельных языковых LSP-серверов ещё предстоит вернуть из бэкапа без старого механизма слияния `opts`; каталог SchemaStore пока не подключён к JSON/YAML LSP.
 
-1. **Повседневное редактирование и поиск с заменой (10):** `mini.pairs`, `mini.ai`, `mini.surround`, `ts-comments.nvim`, `grug-far.nvim`, `mini.align`, `yanky.nvim`, `inc-rename.nvim`, `nvim-colorizer.lua`, `dotenv.nvim`.
+1. **Повседневное редактирование и поиск с заменой (6):** `ts-comments.nvim`, `grug-far.nvim`, `yanky.nvim`, `inc-rename.nvim`, `nvim-colorizer.lua`, `dotenv.nvim`.
 2. **Интерфейс, навигация и Git (5):** `todo-comments.nvim`, `git-conflict.nvim`, `marks.nvim`, `nvim-web-devicons`, `plenary.nvim`. `nvim-web-devicons` не нужен Fyler, Bufferline или Lualine с `mini.icons`: переносить только если потребуется другим плагинам. `plenary.nvim` ставить раньше зависящего от него плагина, а не обязательно на этом этапе.
 3. **Отладка и тесты (11):** `nvim-dap`, `nvim-dap-view`, `nvim-dap-envfile`, `nvim-dap-go`, `mason-nvim-dap.nvim`, `one-small-step-for-vimkind`; затем `nvim-nio`, `neotest`, `neotest-golang`, `neotest-plenary`, `nvim-coverage`. Зависимости устанавливать перед надстройками.
 Превью (`markdown-preview.nvim`, `swagger-preview.nvim`) уже подключены; для них предусмотрены отдельные build-шаги.
