@@ -6,6 +6,7 @@ vim.pack.add({
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/b0o/SchemaStore.nvim",
   "https://github.com/rachartier/tiny-inline-diagnostic.nvim",
+  "https://github.com/smjonas/inc-rename.nvim",
 })
 
 vim.diagnostic.config({
@@ -53,8 +54,11 @@ require("tiny-inline-diagnostic").setup({
 require("lazydev").setup({
   library = {
     { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+    { path = "snacks.nvim", words = { "Snacks" } },
   },
 })
+
+require("inc_rename").setup({ preview_empty_name = true })
 
 require("mason").setup()
 require("mason-lspconfig").setup()
@@ -89,6 +93,8 @@ vim.keymap.set("n", "<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & 
 vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
 vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" })
 vim.keymap.set("n", "<leader>cl", function() Snacks.picker.lsp_config() end, { desc = "Lsp Info" })
-vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+vim.keymap.set("n", "<leader>cr", function()
+  return ":" .. require("inc_rename").config.cmd_name .. " " .. vim.fn.expand("<cword>")
+end, { expr = true, desc = "Rename (inc-rename.nvim)" })
 vim.keymap.set("n", "<leader>ss", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols" })
 vim.keymap.set("n", "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols" })
