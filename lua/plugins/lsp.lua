@@ -137,7 +137,6 @@ require("mason-tool-installer").setup({
     "yamlls",
     -- Markdown
     "marksman",
-    "markdownlint-cli2",
     "markdown-toc",
     -- Proto
     "buf_ls",

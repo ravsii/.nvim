@@ -17,8 +17,8 @@ require("conform").setup({
     -- Shell
     sh = { "shfmt" },
     -- Markdown
-    markdown = { "markdownlint-cli2", "markdown-toc" },
-    ["markdown.mdx"] = { "markdownlint-cli2", "markdown-toc" },
+    markdown = { "markdown-toc" },
+    ["markdown.mdx"] = { "markdown-toc" },
   },
   formatters = {
     injected = { options = { ignore_errors = true } },

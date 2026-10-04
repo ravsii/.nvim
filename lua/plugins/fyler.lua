@@ -5,6 +5,9 @@ vim.pack.add({
 require("fyler").setup({
   auto_confirm_simple_mutation = false,
   integrations = { icon = "nvim_web_devicons" },
+  hooks = {
+    on_rename = function(src_path, destination_path) Snacks.rename.on_rename_file(src_path, destination_path) end,
+  },
   kind_presets = {
     split_left_most = {
       width = 30,

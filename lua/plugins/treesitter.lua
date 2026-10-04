@@ -1,4 +1,4 @@
-local parsers = { "lua", "luadoc", "vim", "vimdoc", "go", "gomod", "gowork", "gosum", "markdown" }
+local parsers = { "lua", "luadoc", "vim", "vimdoc", "go", "gomod", "gowork", "gosum", "markdown", "markdown_inline" }
 
 local function build_parser(data, target)
   local result = vim.system({ "make", target }, { cwd = data.path }):wait()

@@ -23,8 +23,9 @@ A personal, Go-focused Neovim configuration using the built-in `vim.pack` plugin
 
 ### Interface and navigation
 
-- [snacks.nvim](https://github.com/folke/snacks.nvim) — pickers, notifications, terminal, scratch buffers, and editor utilities.
-- [fyler.nvim](https://github.com/FylerOrg/fyler.nvim) — file explorer.
+- [snacks.nvim](https://github.com/folke/snacks.nvim) — pickers, notifications, terminal, scratch buffers, image rendering, floating input, and editor utilities.
+- [fyler.nvim](https://github.com/FylerOrg/fyler.nvim) — file explorer with Snacks LSP-integrated rename hooks.
+- [noice.nvim](https://github.com/folke/noice.nvim) — centered floating command line with command completion.
 - [bufferline.nvim](https://github.com/akinsho/bufferline.nvim) — buffer navigation and diagnostics.
 - [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) — statusline.
 - [lualine-pretty-path](https://github.com/bwpge/lualine-pretty-path) — readable file paths in the statusline.
@@ -71,7 +72,7 @@ Configured formatter chains:
 | Go | `goimports` → `gci` → `formattag` → `gofumpt` |
 | Lua | `stylua` |
 | Shell | `shfmt` |
-| Markdown / MDX | `markdownlint-cli2` → `markdown-toc` |
+| Markdown / MDX | `markdown-toc` |
 
 ### Treesitter
 
@@ -103,11 +104,23 @@ Configured formatter chains:
 
 ### Preview
 
+- [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) — in-editor rendering for Markdown files.
 - [markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim) — Markdown preview in a browser.
 - [swagger-preview.nvim](https://github.com/vinnymeller/swagger-preview.nvim) — Swagger/OpenAPI preview.
 
+Markdown plugins are configured in [`markdown.lua`](lua/plugins/markdown.lua).
+Markdown-only keybindings live under `<leader>M`:
+
+| Keybinding | Action |
+| --- | --- |
+| `<leader>Mm` | Toggle rendering for the current buffer |
+| `<leader>Mp` | Toggle browser preview |
+| `<leader>M+` | Expand the anti-conceal margin |
+| `<leader>M-` | Reduce the anti-conceal margin |
+
 ### Shared dependencies
 
+- [nui.nvim](https://github.com/MunifTanjim/nui.nvim) — UI components used by Noice.
 - [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) — utilities used by multiple plugins.
 
 ## Runtime notes
@@ -117,5 +130,8 @@ Mason installs and automatically updates the tools listed in [`lsp.lua`](lua/plu
 
 External tools used by the configuration include Go, Node.js/npm, `ripgrep`, `lazygit`,
 and build tools for Treesitter parsers. A Nerd Font is recommended for icons.
+
+Snacks images require a terminal supporting the Kitty graphics protocol, such as Kitty or Ghostty.
+ImageMagick is needed to convert formats other than PNG; use `:checkhealth snacks` to check support.
 
 `gotestsum` and `formattag` are expected to be installed manually and available on Neovim's `PATH`.

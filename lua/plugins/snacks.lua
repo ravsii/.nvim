@@ -6,6 +6,8 @@ vim.pack.add({
 require("snacks").setup({
   bigfile = { enabled = true },
   quickfile = { enabled = true },
+  image = { enabled = true },
+  input = { enabled = true, win = { row = 0.5 } },
 
   gitbrowse = {
     url_patterns = {
