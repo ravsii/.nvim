@@ -92,12 +92,14 @@
 
 | Плагин | Статус |
 | --- | --- |
-| `nvim-dap` | ⏳ |
-| `nvim-dap-view` | ⏳ |
-| `nvim-dap-envfile` | ⏳ |
-| `nvim-dap-go` | ⏳ |
-| `mason-nvim-dap.nvim` | ⏳ |
-| `one-small-step-for-vimkind` | ⏳ |
+| `nvim-dap` | ✅ | `lua/plugins/dap.lua`: прежние `<leader>d*` и F-клавиши, знаки, ввод аргументов запуска, `launch.json` с комментариями через Plenary. |
+| `nvim-dap-view` | ✅ | `lua/plugins/dap.lua`: прежние секции, размеры окон, controls, сортировка переменных, автоматическое открытие/закрытие, `<leader>du`/`dE`. |
+| `nvim-dap-envfile` | ✅ | `lua/plugins/dap.lua`: настройка по умолчанию для `envFile`. |
+| `nvim-dap-go` | ✅ | `lua/plugins/dap.lua`: Go-адаптер и конфигурации по умолчанию; Delve запрашивается через Mason в `lsp.lua`. |
+| `mason-nvim-dap.nvim` | ✅ | `lua/plugins/dap.lua`: `setup()` для команд управления адаптерами; установка централизована в `mason-tool-installer`, автоматические handlers не заданы, чтобы не перезаписывать адаптер `dap-go`. |
+| `one-small-step-for-vimkind` | ✅ | `lua/plugins/dap.lua`: Lua attach на `127.0.0.1:8086`; `<leader>dn` запускает OSV в отлаживаемом Neovim. |
+
+DAP подключается в `init.lua` перед Neotest. Реальные сессии Go/Lua, envFile, launch.json и интерфейс DAP View ещё нужно проверить вручную после установки плагинов и Delve пользователем. Ассистент их не устанавливает и отладочные процессы не запускает.
 
 ### Тесты и покрытие
 
@@ -105,11 +107,11 @@
 | --- | --- |
 | `neotest` | ✅ | `lua/plugins/tests.lua`: прежние настройки и бинды запуска, summary, output, остановки и watch. |
 | `nvim-nio` | ✅ | Объявлен перед Neotest в `lua/plugins/tests.lua`. |
-| `neotest-golang` | ✅ | `lua/plugins/tests.lua`: `gotestsum`, `-race`, testify и цветной вывод; `dap_go_enabled` пока отключён. |
-| `neotest-plenary` | ✅ | Lua-адаптер включён в общий список адаптеров в `lua/plugins/tests.lua`. |
+| `neotest-golang` | ✅ | `lua/plugins/tests.lua`: `gotestsum`, `-race`, testify и цветной вывод; `dap_go_enabled = true`, DAP загружается до настройки адаптера. |
+| `neotest-plenary` | — | Ранее перенесён, но в текущем `tests.lua` уже отсутствует; при переносе DAP не возвращался. |
 | `nvim-coverage` | ✅ | `lua/plugins/tests.lua`: автообновление, знаки `+`/`-`/`~` и прежние бинды `<leader>tc*`. |
 
-Neotest использует DAP только для отдельного действия «Debug Nearest» (`<leader>td`); бинд сохранён в подключённом `lua/plugins/dap.lua`, но заработает после переноса DAP и его адаптеров. При переносе `nvim-dap-go` нужно включить `dap_go_enabled` в `tests.lua`. Обычный запуск тестов не зависит от отладчика. `plenary.nvim` явно объявлен как зависимость в `tests.lua` и также остаётся в `comments.lua`.
+Neotest использует DAP для отдельного действия «Debug Nearest» (`<leader>td`); бинд находится в `lua/plugins/dap.lua`, интеграция `nvim-dap-go` включена в `tests.lua`. Обычный запуск тестов не зависит от отладчика. `plenary.nvim` явно объявлен как зависимость в `tests.lua` и `dap.lua`, также остаётся в `comments.lua`.
 
 `gotestsum` пользователь устанавливает вручную: `go install gotest.tools/gotestsum@latest`; каталог установки должен быть в `PATH` Neovim. Хука автоматической установки нет. Установка плагинов и проверка реального запуска тестов/покрытия остаются за пользователем.
 
@@ -120,7 +122,7 @@ Neotest использует DAP только для отдельного дей
 | `markdown-preview.nvim` | ✅ | `lua/plugins/preview.lua`: `<leader>cp` для Markdown, `FileType` для команд в текущем буфере; установщик плагина вызывается через `PackChanged` при установке/обновлении пользователем. |
 | `swagger-preview.nvim` | ✅ | `lua/plugins/preview.lua`: `<leader>cp` для JSON, прежние host `127.0.0.1` и port `6969`; `npm install` вызывается через `PackChanged` при установке/обновлении пользователем. Требуется npm. |
 
-Итого для старого набора: **40 перенесено, 6 ожидают переноса, 9 исключены**. `lazy.nvim` как менеджер заменён на `vim.pack` и в подсчёт не входит.
+Все шесть DAP-плагинов, ранее ожидавших переноса, подключены. Итоговый состав старого набора нужно сверить после удаления исключённых D2/Slint и учёта отсутствующего `neotest-plenary`. `lazy.nvim` как менеджер заменён на `vim.pack`.
 
 SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pack-lock.json`, но работу LSP, установку `lua_ls` и интерфейс which-key нужно проверить вручную.
 Прежние бинды LSP из `lua/core/lsp.lua` восстановлены в `lua/plugins/lsp.lua`: `gd`, `gI`, `gr`, `gy`, `<leader>cl`, `<leader>ss`, `<leader>sS` снова вызывают Snacks Picker с превью. `gD`, `gK` и другие действия остаются встроенными LSP-вызовами. Старое удаление встроенных `grn`, `gra`, `gri`, `grr` не возвращали; для `gr` восстановлен `nowait = true`, что может помешать этим сочетаниям. SchemaStore и языковые настройки LSP остаются в `lsp.lua`; для дополнения вместо встроенного LSP-автотриггера подключён Blink в `lua/plugins/blink.lua` (до `lsp.lua` в `init.lua`). Встроенное автоматическое дополнение слов отключено, чтобы меню не конкурировали.
@@ -135,10 +137,7 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 
 ## Очерёдность оставшегося переноса
 
-Внутри группы можно переносить плагины по одному или небольшими связками; настройки каждого плагина держать рядом с его подключением. Ниже перечислены **6** плагинов со статусом ⏳ ровно по одному разу. Языковые LSP-настройки и схемы SchemaStore перенесены; работу серверов ещё нужно проверить вручную.
-
-1. **Отладка / DAP (6):** `nvim-dap`, `nvim-dap-view`, `nvim-dap-envfile`, `nvim-dap-go`, `mason-nvim-dap.nvim`, `one-small-step-for-vimkind`.
-Тесты и покрытие (5) уже подключены в `lua/plugins/tests.lua`; отладка теста через `<leader>td` потребует переноса DAP.
+DAP, Go-тесты, покрытие, языковые LSP-настройки и схемы SchemaStore перенесены. Дальше — удаление исключённых D2/Slint из активного Treesitter, сверка оставшихся биндов и ручная проверка работы установленного конфига. Lua-тестовый адаптер `neotest-plenary` в текущем конфиге отсутствует.
 Превью (`markdown-preview.nvim`, `swagger-preview.nvim`) уже подключены; для них предусмотрены отдельные build-шаги.
 
 **Исключены из переноса (9):** `luassert-types`, `busted-types`, `leetcode.nvim`, `nui.nvim`, `nvim-lint`, `nvim-colorizer.lua`, `dotenv.nvim`, `nvim-web-devicons`, `git-conflict.nvim`. Их конфигурация остаётся только в бэкапе; устанавливать их не планируем.
@@ -146,6 +145,8 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 **Отдельно:** FFF убран из активного конфига: `lua/plugins/fff.lua` удалён, подключение из `init.lua` убрано. Его файлы и запись в `nvim-pack-lock.json` не удалялись вручную; очистку установленного пакета выполнить отдельно по решению пользователя. Поиск файлов и grep теперь выполняет Snacks Picker; Fyler остаётся проводником.
 
 ## TODO: языковые инструменты и LSP
+
+`lua/ozon.lua` перенесён отдельно и подключается из `lsp.lua` до автоматического включения серверов через Mason. Для каждого клиента `golangci_lint_ls` ищет `.golangci.pipeline.yaml` от корня проекта вверх и добавляет `--config=<путь>` в команду линтера, сохраняя штатный `before_init` (выбор аргументов для версии golangci-lint). В проектах без этого файла аргументы остаются штатными. Старые аргументы GCI из `ozon.lua` уже заданы в `conform.lua`.
 
 Языковые настройки перенесены напрямую в `lua/plugins/lsp.lua`, **без прежнего слияния `opts`**, с комментариями по языкам. Конфигурации серверов задаются до `mason-lspconfig.setup()`. `mason-tool-installer` принимает имена серверов благодаря включённой по умолчанию интеграции с `mason-lspconfig`; тот автоматически включает установленные через Mason серверы.
 
@@ -155,7 +156,7 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 - [ ] Проверить установку и автоактивацию серверов, поведение LuaLS с Lazydev и диагностику JSON/YAML в Neovim. Ассистент установку не запускает.
 - [x] Добавить в Mason форматтеры Go (`gofumpt`, `goimports`, `gci`), Lua (`stylua`), shell (`shfmt`), Markdown (`markdownlint-cli2`, `markdown-toc`) и Go-утилиту `impl`. Настройки форматирования находятся в `conform.lua`, установка инструментов — в `lsp.lua`.
 - [ ] Установить `formattag` вручную и проверить цепочки форматирования через `:ConformInfo`, бинды и сохранение файла. Ассистент инструменты не устанавливает.
-- [ ] Перенести `delve` вместе с DAP. Не возвращать исключённый `nvim-lint`.
+- [x] Добавить `delve` в общий список `mason-tool-installer` для `nvim-dap-go`. Не возвращать исключённый `nvim-lint`.
 - [ ] Сверить парсеры Treesitter и форматтеры с активным конфигом. Python, D2 и Slint исключены по решению пользователя; при следующем изменении Treesitter удалить уже добавленные плагин/хук D2 и парсер Slint.
 
 ## Бинды прежнего Snacks

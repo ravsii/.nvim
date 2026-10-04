@@ -11,8 +11,7 @@ require("neotest").setup({
     require("neotest-golang")({
       runner = "gotestsum",
       go_test_args = { "-race" },
-      -- Интеграцию включим после переноса nvim-dap-go.
-      dap_go_enabled = false,
+      dap_go_enabled = true,
       warn_test_name_dupes = false,
       testify_enabled = true,
       colorize_test_output = true,

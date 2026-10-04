@@ -103,6 +103,7 @@ vim.lsp.config("yamlls", {
 })
 
 -- Mason
+require("ozon")
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-tool-installer").setup({
@@ -114,6 +115,8 @@ require("mason-tool-installer").setup({
     "goimports",
     "gci",
     "gofumpt",
+    -- Go DAP
+    "delve",
     -- Lua
     "lua_ls",
     "stylua",
