@@ -1,5 +1,3 @@
-require("config.ui2")
-
 -- keymap leader
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"

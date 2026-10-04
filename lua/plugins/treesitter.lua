@@ -1,4 +1,4 @@
-local parsers = { "lua", "luadoc", "vim", "vimdoc", "go", "gomod", "gowork", "gosum", "markdown", "slint" }
+local parsers = { "lua", "luadoc", "vim", "vimdoc", "go", "gomod", "gowork", "gosum", "markdown" }
 
 local function build_parser(data, target)
   local result = vim.system({ "make", target }, { cwd = data.path }):wait()
@@ -6,10 +6,6 @@ local function build_parser(data, target)
     vim.notify(data.spec.name .. " build failed:\n" .. (result.stderr or ""), vim.log.levels.ERROR)
   end
 end
-
-require("utils.pack_changed").on_change("tree-sitter-d2", function(data)
-  build_parser(data, "nvim-install")
-end)
 
 require("utils.pack_changed").on_change("tree-sitter-ghostty", function(data)
   build_parser(data, "nvim_install")
@@ -23,7 +19,6 @@ vim.pack.add({
   "https://github.com/nvim-treesitter/nvim-treesitter",
   "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
   "https://github.com/nvim-treesitter/nvim-treesitter-context",
-  "https://github.com/ravsii/tree-sitter-d2",
   "https://github.com/bezhermoso/tree-sitter-ghostty",
 })
 

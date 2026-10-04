@@ -66,7 +66,6 @@ for _, key in ipairs({
   { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep (Root Dir)" },
   { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
   { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
-  { "<leader>sp", function() Snacks.picker.lazy() end, desc = "Search for Plugin Spec" },
   {
     "<leader>sw",
     function() Snacks.picker.grep_word() end,
