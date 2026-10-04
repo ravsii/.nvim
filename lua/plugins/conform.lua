@@ -10,14 +10,19 @@ require("conform").setup({
     lsp_format = "fallback",
   },
   formatters_by_ft = {
+    -- Lua
     lua = { "stylua" },
+    -- Go
     go = { "goimports", "gci", "formattag", "gofumpt" },
+    -- Shell
     sh = { "shfmt" },
+    -- Markdown
     markdown = { "markdownlint-cli2", "markdown-toc" },
     ["markdown.mdx"] = { "markdownlint-cli2", "markdown-toc" },
   },
   formatters = {
     injected = { options = { ignore_errors = true } },
+    -- Go
     gci = {
       command = "gci",
       stdin = true,

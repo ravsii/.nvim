@@ -51,6 +51,7 @@ require("tiny-inline-diagnostic").setup({
   },
 })
 
+-- Lua
 require("lazydev").setup({
   library = {
     { path = "${3rd}/luv/library", words = { "vim%.uv" } },
@@ -60,11 +61,76 @@ require("lazydev").setup({
 
 require("inc_rename").setup({ preview_empty_name = true })
 
+-- Go
+vim.lsp.config("gopls", {
+  settings = {
+    gopls = {
+      analyses = { composites = false, fieldalignment = false },
+    },
+  },
+})
+
+-- Lua
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      runtime = { version = "LuaJIT" },
+      diagnostics = { globals = { "vim", "require" } },
+      workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+      telemetry = { enable = false },
+    },
+  },
+})
+
+-- JSON
+vim.lsp.config("jsonls", {
+  settings = {
+    json = {
+      schemas = require("schemastore").json.schemas(),
+      validate = { enable = true },
+    },
+  },
+})
+
+-- YAML
+vim.lsp.config("yamlls", {
+  settings = {
+    yaml = {
+      schemaStore = { enable = false, url = "" },
+      schemas = require("schemastore").yaml.schemas(),
+    },
+  },
+})
+
+-- Mason
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-tool-installer").setup({
-  ensure_installed = { "lua_ls" },
-  auto_update = false,
+  ensure_installed = {
+    -- Go
+    "gopls",
+    "golangci_lint_ls",
+    "golangci-lint",
+    "goimports",
+    "gci",
+    "gofumpt",
+    -- Lua
+    "lua_ls",
+    "stylua",
+    -- Shell
+    "shfmt",
+    -- JSON
+    "jsonls",
+    -- YAML
+    "yamlls",
+    -- Markdown
+    "marksman",
+    "markdownlint-cli2",
+    "markdown-toc",
+    -- Proto
+    "buf_ls",
+  },
+  auto_update = true,
   run_on_start = true,
 })
 
@@ -93,8 +159,16 @@ vim.keymap.set("n", "<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & 
 vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
 vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" })
 vim.keymap.set("n", "<leader>cl", function() Snacks.picker.lsp_config() end, { desc = "Lsp Info" })
-vim.keymap.set("n", "<leader>cr", function()
-  return ":" .. require("inc_rename").config.cmd_name .. " " .. vim.fn.expand("<cword>")
-end, { expr = true, desc = "Rename (inc-rename.nvim)" })
+vim.keymap.set(
+  "n",
+  "<leader>cr",
+  function() return ":" .. require("inc_rename").config.cmd_name .. " " .. vim.fn.expand("<cword>") end,
+  { expr = true, desc = "Rename (inc-rename.nvim)" }
+)
 vim.keymap.set("n", "<leader>ss", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols" })
-vim.keymap.set("n", "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols" })
+vim.keymap.set(
+  "n",
+  "<leader>sS",
+  function() Snacks.picker.lsp_workspace_symbols() end,
+  { desc = "LSP Workspace Symbols" }
+)

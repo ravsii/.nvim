@@ -65,14 +65,14 @@
 
 | Плагин | Статус | Примечание |
 | --- | --- | --- |
-| `nvim-lspconfig` | ✅ | Подключён в `lua/plugins/lsp.lua`; прежние LSP-бинды с Snacks Picker восстановлены, знаки диагностики взяты из бэкапа. Настройки отдельных языков пока не перенесены. |
+| `nvim-lspconfig` | ✅ | `lua/plugins/lsp.lua`: прежние бинды и знаки диагностики; настройки Go/Lua и схемы JSON/YAML перенесены через `vim.lsp.config()`. |
 | `mason.nvim` | ✅ | Подключён и настроен в `lua/plugins/lsp.lua`; `<leader>cm` открывает Mason. |
 | `mason-lspconfig.nvim` | ✅ | Подключён и настроен в `lua/plugins/lsp.lua`; автоматически включает установленные через Mason LSP-серверы. |
-| `mason-tool-installer.nvim` | ✅ | Подключён и настроен в `lua/plugins/lsp.lua`; пока запрашивает только `lua_ls`. |
-| `conform.nvim` | ✅ | `lua/plugins/formatting.lua`: форматтеры из бэкапа, бинды и форматирование перед сохранением. Исполняемые файлы форматтеров нужно установить отдельно. |
+| `mason-tool-installer.nvim` | ✅ | `lua/plugins/lsp.lua`: запрашивает `gopls`, `golangci_lint_ls`, `lua_ls`, `jsonls`, `yamlls`, `marksman`, `buf_ls` и необходимый для Go-линтера `golangci-lint`. |
+| `conform.nvim` | ✅ | `lua/plugins/conform.lua` (переименован из `formatting.lua`): форматтеры из бэкапа, бинды и форматирование перед сохранением. `goimports`, `gci`, `gofumpt`, `stylua`, `shfmt`, `markdownlint-cli2`, `markdown-toc` добавлены в Mason в `lsp.lua`; `formattag` устанавливается вручную и должен быть в `PATH` Neovim. |
 | `nvim-lint` | 🚫 | Решено не переносить. |
 | `lazydev.nvim` | ✅ | `lua/plugins/lsp.lua`: поддержка `vim.uv` и библиотека `snacks.nvim` для глобального `Snacks` в LuaLS; без старых зависимостей busted/luassert. |
-| `SchemaStore.nvim` | ✅ | Подключён в `lua/plugins/lsp.lua` без `setup()`; схемы пока не подключены к JSON/YAML LSP. |
+| `SchemaStore.nvim` | ✅ | `lua/plugins/lsp.lua`: схемы подключены к `jsonls` и `yamlls`; встроенный schemaStore YAML отключён. |
 | `luassert-types` | 🚫 | Библиотека старой настройки lazydev; не переносить. |
 | `busted-types` | 🚫 | Библиотека старой настройки lazydev; не переносить. |
 
@@ -135,7 +135,7 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 
 ## Очерёдность оставшегося переноса
 
-Внутри группы можно переносить плагины по одному или небольшими связками; настройки каждого плагина держать рядом с его подключением. Ниже перечислены **6** плагинов со статусом ⏳ ровно по одному разу. Настройки отдельных языковых LSP-серверов ещё предстоит вернуть из бэкапа без старого механизма слияния `opts`; каталог SchemaStore пока не подключён к JSON/YAML LSP.
+Внутри группы можно переносить плагины по одному или небольшими связками; настройки каждого плагина держать рядом с его подключением. Ниже перечислены **6** плагинов со статусом ⏳ ровно по одному разу. Языковые LSP-настройки и схемы SchemaStore перенесены; работу серверов ещё нужно проверить вручную.
 
 1. **Отладка / DAP (6):** `nvim-dap`, `nvim-dap-view`, `nvim-dap-envfile`, `nvim-dap-go`, `mason-nvim-dap.nvim`, `one-small-step-for-vimkind`.
 Тесты и покрытие (5) уже подключены в `lua/plugins/tests.lua`; отладка теста через `<leader>td` потребует переноса DAP.
@@ -147,13 +147,16 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 
 ## TODO: языковые инструменты и LSP
 
-Сверить `.migration-backup/pre-vim-pack-2026-09-29/lua/langs/` и `lua/install.lua` с активными `lua/plugins/lsp.lua`, `lua/plugins/formatting.lua` и `lua/plugins/treesitter.lua`. Сейчас `mason-tool-installer` запрашивает только `lua_ls`; переносить языковые настройки напрямую, **без прежнего слияния `opts`**.
+Языковые настройки перенесены напрямую в `lua/plugins/lsp.lua`, **без прежнего слияния `opts`**, с комментариями по языкам. Конфигурации серверов задаются до `mason-lspconfig.setup()`. `mason-tool-installer` принимает имена серверов благодаря включённой по умолчанию интеграции с `mason-lspconfig`; тот автоматически включает установленные через Mason серверы.
 
-- [ ] Перенести список используемых Mason LSP-серверов: `gopls`, `golangci_lint_ls`, `lua_ls`, `jsonls` (пакет Mason `json-lsp`), `yamlls`, `marksman`, `slint_lsp` (пакет `slint-lsp`), `buf_ls`; сверить имена серверов с актуальным `mason-lspconfig`.
-- [ ] Перенести в `mason-tool-installer` остальные инструменты из языковых файлов: Go (`gofumpt`, `delve`, `goimports`, `golangci-lint`, `impl`, `gci`), Lua (`stylua`), shell (`shfmt`), Markdown (`markdownlint-cli2`, `markdown-toc`). Не возвращать исключённый `nvim-lint` автоматически.
-- [ ] Вернуть настройки серверов `gopls` и `lua_ls` из старых `langs/go.lua` и `langs/lua.lua`; проверить автоактивацию через Mason и поведение `lua_ls` вместе с `lazydev.nvim`.
-- [ ] Подключить схемы SchemaStore к JSON/YAML LSP (`jsonls`, `yamlls`) и проверить диагностику на этих файлах.
-- [ ] Сверить оставшиеся языковые парсеры Treesitter и форматтеры с активным конфигом; затем проверить работу серверов и внешних инструментов в Neovim. Закомментированный Python-конфиг не включать без отдельного решения.
+- [x] Перенести список LSP-серверов: `gopls`, `golangci_lint_ls`, `lua_ls`, `jsonls`, `yamlls`, `marksman`, `buf_ls`; добавить `golangci-lint` для Go-линтера. Slint исключён по решению пользователя.
+- [x] Вернуть настройки `gopls` и `lua_ls` из старых `langs/go.lua` и `langs/lua.lua`.
+- [x] Подключить схемы SchemaStore к JSON/YAML LSP (`jsonls`, `yamlls`).
+- [ ] Проверить установку и автоактивацию серверов, поведение LuaLS с Lazydev и диагностику JSON/YAML в Neovim. Ассистент установку не запускает.
+- [x] Добавить в Mason форматтеры Go (`gofumpt`, `goimports`, `gci`), Lua (`stylua`), shell (`shfmt`), Markdown (`markdownlint-cli2`, `markdown-toc`) и Go-утилиту `impl`. Настройки форматирования находятся в `conform.lua`, установка инструментов — в `lsp.lua`.
+- [ ] Установить `formattag` вручную и проверить цепочки форматирования через `:ConformInfo`, бинды и сохранение файла. Ассистент инструменты не устанавливает.
+- [ ] Перенести `delve` вместе с DAP. Не возвращать исключённый `nvim-lint`.
+- [ ] Сверить парсеры Treesitter и форматтеры с активным конфигом. Python, D2 и Slint исключены по решению пользователя; при следующем изменении Treesitter удалить уже добавленные плагин/хук D2 и парсер Slint.
 
 ## Бинды прежнего Snacks
 
@@ -175,7 +178,7 @@ SchemaStore, LSP/Mason и `which-key.nvim` присутствуют в `nvim-pac
 | LSP | Перенесены `K`, `gd`, `gD`, `gI`, `gK`, `gr`, `gy`, `<C-k>` (insert), `<leader>cC`, `<leader>ca`, `<leader>cc`, `<leader>cl`, `<leader>cr`, `<leader>ss`, `<leader>sS`. Прежние Snacks LSP-пикеры снова открывают списки и превью; `gr` с `nowait` может мешать встроенным `grn`, `gra`, `gri`, `grr`. |
 | Общие бинды | Из `lua/config/keymaps.lua` не вернулся `<leader>ur` (очистка поиска, `diffupdate`, перерисовка). Старый `<leader>l` для lazy.nvim намеренно не возвращён; управление `vim.pack` осталось на `<leader>Pu` и `<leader>Pl`. |
 
-Отдельно от биндов: настройки языковых LSP-серверов, интеграция SchemaStore с JSON/YAML и источник сниппетов для автодополнения ещё не перенесены.
+Отдельно от биндов: настройки языковых LSP-серверов и интеграция SchemaStore с JSON/YAML перенесены; локальный источник сниппетов подключён в `blink.lua`. Работу серверов ещё нужно проверить вручную.
 
 ## Общий статус конфига
 
