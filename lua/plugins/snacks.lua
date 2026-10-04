@@ -33,6 +33,7 @@ require("snacks").setup({
 })
 
 for _, key in ipairs({
+  { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
   { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
 
   -- buffers
@@ -42,10 +43,14 @@ for _, key in ipairs({
 
   -- find
   { "<leader><space>", function() Snacks.picker.files() end, desc = "Find Files (Root Dir)" },
+  { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Find Buffers" },
   { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config" },
+  { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Files (git-files)" },
+  { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
 
   -- git
   { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse (open)", mode = { "n", "x" } },
+  { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
   { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Current File History", mode = "n" },
   { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log (cwd)", mode = "n" },
   { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (hunks)" },
@@ -123,6 +128,10 @@ for _, key in ipairs({
   -- Terminal
   { "<c-/>", function() Snacks.terminal(nil) end, desc = "Terminal (Root Dir)", mode = "n" },
   { "<c-_>", function() Snacks.terminal(nil) end, desc = "which_key_ignore", mode = "n" },
+
+  -- Scratch
+  { "<leader>.", function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
+  { "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
 }) do
   vim.keymap.set(key.mode or "n", key[1], key[2], { desc = key.desc, remap = key.remap })
 end

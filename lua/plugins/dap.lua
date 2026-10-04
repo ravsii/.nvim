@@ -1,5 +1,4 @@
 vim.pack.add({
-  "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/mfussenegger/nvim-dap",
   "https://github.com/igorlfs/nvim-dap-view",
   "https://github.com/ravsii/nvim-dap-envfile",
@@ -36,10 +35,8 @@ dap.configurations.lua = {
   },
 }
 
--- launch.json
-local vscode = require("dap.ext.vscode")
-local json = require("plenary.json")
-vscode.json_decode = function(str) return vim.json.decode(json.json_strip_comments(str)) end
+-- Используем только Lua-конфигурации отладки, без .vscode/launch.json.
+dap.providers.configs["dap.launch.json"] = nil
 
 -- envFile
 require("nvim-dap-envfile").setup({})

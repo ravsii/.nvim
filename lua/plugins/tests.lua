@@ -11,7 +11,7 @@ require("neotest").setup({
     require("neotest-golang")({
       runner = "gotestsum",
       go_test_args = { "-race" },
-      dap_go_enabled = true,
+      dap_mode = "dap-go",
       warn_test_name_dupes = false,
       testify_enabled = true,
       colorize_test_output = true,
@@ -31,7 +31,10 @@ require("coverage").setup({
   },
 })
 
-require("which-key").add({ "<leader>tc", group = "coverage" })
+require("which-key").add({
+  { "<leader>t", group = "test", mode = "n" },
+  { "<leader>tc", group = "coverage", mode = "n" },
+})
 
 vim.keymap.set(
   "n",
@@ -72,8 +75,6 @@ vim.keymap.set(
   function() require("neotest").watch.toggle(vim.fn.expand("%")) end,
   { desc = "Toggle Watch (Neotest)" }
 )
-
-require("which-key").add({ "<leader>tc", group = "coverage" })
 
 vim.keymap.set("n", "<leader>tcc", "<cmd>Coverage<cr>", { desc = "Show coverage" })
 vim.keymap.set("n", "<leader>tcC", function()

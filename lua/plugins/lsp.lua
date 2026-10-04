@@ -20,6 +20,15 @@ vim.diagnostic.config({
   },
   virtual_text = false,
   virtual_lines = false,
+  update_in_insert = true,
+  underline = true,
+  severity_sort = true,
+  float = {
+    max_width = 80,
+    anchor_bias = "below",
+    wrap = true,
+    focusable = true,
+  },
 })
 
 require("tiny-inline-diagnostic").setup({
@@ -145,6 +154,9 @@ vim.keymap.set(
   function()
     vim.lsp.buf.hover({
       close_events = { "CursorMoved", "BufHidden", "LspDetach" },
+      max_width = 80,
+      anchor_bias = "below",
+      wrap = true,
       focusable = true,
     })
   end,

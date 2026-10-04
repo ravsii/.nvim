@@ -20,10 +20,6 @@
       "rev": "016802de402556da54c36bd7359b441266b01cdd",
       "src": "https://github.com/stevearc/conform.nvim"
     },
-    "fff": {
-      "rev": "89c19270ea2dfc20829a7429f72022571558093e",
-      "src": "https://github.com/dmtrKovalenko/fff"
-    },
     "friendly-snippets": {
       "rev": "b4d01b0fdf3c9a549961c2f9ffe8dc09be166219",
       "src": "https://github.com/rafamadriz/friendly-snippets"
@@ -164,11 +160,6 @@
       "rev": "1ed8bcc9ce7d43a0e8e05d0001c9cadb822d95a8",
       "src": "https://github.com/spacedentist/resolve.nvim"
     },
-    "rose-pine": {
-      "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
-      "src": "https://github.com/rose-pine/neovim",
-      "version": "'main'"
-    },
     "snacks.nvim": {
       "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
       "src": "https://github.com/folke/snacks.nvim"
@@ -188,10 +179,6 @@
     "tokyonight.nvim": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim"
-    },
-    "tree-sitter-d2": {
-      "rev": "200434618a6bede20ebd4982aa4d4f1edeb0b5c1",
-      "src": "https://github.com/ravsii/tree-sitter-d2"
     },
     "tree-sitter-ghostty": {
       "rev": "a2075c3761a41449bb4faf69794c902dfef6d70e",
