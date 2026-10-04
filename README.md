@@ -11,10 +11,8 @@ A personal, Go-focused Neovim configuration using the built-in `vim.pack` plugin
 - [`init.lua`](init.lua) — configuration entry point and module loading order.
 - [`lua/config/`](lua/config/) — editor options, keymaps, autocommands, and plugin-management shortcuts.
 - [`lua/plugins/`](lua/plugins/) — plugin declarations, settings, and keymaps.
-- [`lua/ozon.lua`](lua/ozon.lua) — project-specific Go lint configuration.
 - [`ftplugin/`](ftplugin/) — local filetype settings.
 - [`snippets/`](snippets/) — custom snippets.
-- [`nvim-pack-lock.json`](nvim-pack-lock.json) — pinned plugin revisions.
 
 ## Plugins
 

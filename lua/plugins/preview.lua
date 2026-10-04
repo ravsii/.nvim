@@ -20,9 +20,6 @@ require("swagger-preview").setup({
   host = "127.0.0.1",
 })
 
--- Markdown Preview creates buffer-local commands on FileType/BufEnter.
-vim.cmd("doautocmd FileType")
-
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "markdown",
   callback = function(event)
