@@ -61,15 +61,11 @@ local function ai_whichkey(opts)
 end
 
 vim.pack.add({
-  "https://github.com/nvim-mini/mini.icons",
   "https://github.com/nvim-mini/mini.pairs",
   "https://github.com/nvim-mini/mini.ai",
   "https://github.com/nvim-mini/mini.align",
   "https://github.com/nvim-mini/mini.surround",
 })
-
-require("mini.icons").setup()
--- require("mini.icons").mock_nvim_web_devicons()
 
 require("mini.pairs").setup({
   modes = { insert = true, command = true, terminal = false },

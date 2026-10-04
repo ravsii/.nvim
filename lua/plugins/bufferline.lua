@@ -19,9 +19,6 @@ bufferline.setup({
     tab_size = 1,
     diagnostics = "nvim_lsp",
     color_icons = true,
-    get_element_icon = function(element)
-      return require("mini.icons").get("file", element.path)
-    end,
     diagnostics_indicator = function(count, level)
       local icon = level:match("error") and "" or ""
       return icon .. " " .. count

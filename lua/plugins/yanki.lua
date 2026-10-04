@@ -4,7 +4,7 @@ vim.pack.add({
 
 require("yanky").setup({ highlight = { timer = 150 } })
 
-vim.keymap.set({ "n", "x" }, "<leader>p", function() vim.cmd("YankyRingHistory") end, { desc = "Open Yank History" })
+vim.keymap.set({ "n", "x" }, "<leader>P", function() vim.cmd("YankyRingHistory") end, { desc = "Open Yank History" })
 
 for _, key in ipairs({
   { "y", "<Plug>(YankyYank)", "Yank Text", { "n", "x" } },

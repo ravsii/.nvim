@@ -4,7 +4,7 @@ vim.pack.add({
 
 require("fyler").setup({
   auto_confirm_simple_mutation = false,
-  integrations = { icon = "mini_icons" },
+  integrations = { icon = "nvim_web_devicons" },
   kind_presets = {
     split_left_most = {
       width = 30,
