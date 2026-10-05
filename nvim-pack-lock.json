@@ -108,6 +108,14 @@
       "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
       "src": "https://github.com/rose-pine/neovim"
     },
+    "noice.nvim": {
+      "rev": "7bfd942445fb63089b59f97ca487d605e715f155",
+      "src": "https://github.com/folke/noice.nvim"
+    },
+    "nui.nvim": {
+      "rev": "10fc361835c856ba4233ef5ea135b919bf3dce97",
+      "src": "https://github.com/MunifTanjim/nui.nvim"
+    },
     "nvim-coverage": {
       "rev": "a939e425e363319d952a6c35fb3f38b34041ded2",
       "src": "https://github.com/andythigpen/nvim-coverage"
@@ -148,6 +156,10 @@
       "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
+    "nvim-web-devicons": {
+      "rev": "58447c1fca354bbf184425e4a8d01deecbd6f3c4",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
     "one-small-step-for-vimkind": {
       "rev": "1af6ffb9b5229a856e8090fa2f690e0931a5aace",
       "src": "https://github.com/jbyuki/one-small-step-for-vimkind"
@@ -155,6 +167,10 @@
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "render-markdown.nvim": {
+      "rev": "640a3ec6d538bad17c328be373c7cad0293d9589",
+      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "resolve.nvim": {
       "rev": "1ed8bcc9ce7d43a0e8e05d0001c9cadb822d95a8",
