@@ -13,6 +13,9 @@ require("fyler").setup({
     end,
     on_rename = function(src_path, destination_path) Snacks.rename.on_rename_file(src_path, destination_path) end,
   },
+  extensions = {
+    git = { enabled = true },
+  },
   kind = "floating",
   kind_presets = {
     floating = {
