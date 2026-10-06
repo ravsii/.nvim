@@ -6,6 +6,11 @@ require("fyler").setup({
   auto_confirm_simple_mutation = false,
   integrations = { icon = "nvim_web_devicons" },
   hooks = {
+    on_highlight = function(highlights)
+      local color = require("rose-pine.palette").love
+      highlights.FylerFloatBorder.fg = color
+      highlights.FylerFloatTitle.fg = color
+    end,
     on_rename = function(src_path, destination_path) Snacks.rename.on_rename_file(src_path, destination_path) end,
   },
   kind = "floating",
@@ -15,6 +20,7 @@ require("fyler").setup({
       border = "rounded",
       title = " Fyler ",
       title_pos = "center",
+      win_opts = { winhighlight = "FloatBorder:FylerFloatBorder,FloatTitle:FylerFloatTitle" },
     },
     split_left_most = {
       width = 40,
