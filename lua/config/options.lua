@@ -72,3 +72,5 @@ vim.opt.exrc = true -- allow project-specific config
 vim.opt.secure = true -- disable unsafe commands in local configs
 
 vim.opt.winborder = "rounded"
+
+require("vim._core.ui2").enable()
